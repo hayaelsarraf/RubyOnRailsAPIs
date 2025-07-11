@@ -1,0 +1,30 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: postgres
+  password: password
+  host: db
+  port: 5432
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  database: blog_api_<%= Rails.env %>
+
+
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  primary: &primary_production
+    <<: *default
+  cache:
+    <<: *primary_production
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *primary_production
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *primary_production
+    migrations_paths: db/cable_migrate
